@@ -51,4 +51,36 @@ const signUpUser = async (req, res, next) => {
   }
 };
 
-export { signUpUser };
+const signinUser = async (req, res, next) => {
+  const { penno, password } = req.body;
+  try {
+    if (!penno || !password) {
+      return res.status(400).json("Enter Credentionals");
+    }
+
+    const userExist = await userModel.findOne({ penno }).select("+password");
+    if (!userExist) {
+      return res.status(400).json("User Not Found");
+    } else
+      bcrypt.compare(password, userExist.password).then((status) => {
+        if (status) {
+          const { name, _id, penno } = userExist;
+          generateToken(res, _id);
+          return res.status(400).json({
+            name,
+            id: _id,
+            penno,
+            message: "Login successfully",
+          });
+        } else {
+          return res.status(400).json({
+            message: "Invalid User Credentionals",
+          });
+        }
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { signUpUser, signinUser };
