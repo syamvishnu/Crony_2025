@@ -6,6 +6,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter Username"],
     },
+    roll: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
     penno: {
       type: Number,
       required: [true, "Please enter Penno"],

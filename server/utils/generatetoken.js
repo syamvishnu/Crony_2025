@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
 const generateToken = (res, userId) => {
-  const secretKey = "test@321"; // Replace with your actual secret key
-  const algorithm = "HS256"; // Consider using a more secure algorithm if needed
+  const secretKey = process.env.JWT_SECRET;
+  const algorithm = "HS256";
 
   const token = jwt.sign({ userId }, secretKey, {
     expiresIn: "30d",
