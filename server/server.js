@@ -3,7 +3,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import connectDB from "./config/db.js";
 import cookieParser from "cookie-parser";
-
 import dotenv from "dotenv";
 import userRouter from "./routes/userRoutes.js";
 import userLoginActivity from "./middleware/userLogMiddleware.js";
