@@ -66,7 +66,7 @@ const signinUser = async (req, res, next) => {
         if (status) {
           const { name, _id, penno } = userExist;
           generateToken(res, _id);
-          return res.status(400).json({
+          return res.status(200).json({
             name,
             id: _id,
             penno,

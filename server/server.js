@@ -16,14 +16,17 @@ const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use("/api/auth", userLoginActivity, userRouter);
 app.use("/api/sdr", sdrSearchActivity, sdrRouter);
 app.use("/api/admin", isAdmin, AdminRouter);
 
 const PORT = process.env.PORT || 5000;
-
-app.use(cors);
 
 connectDB();
 

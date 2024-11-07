@@ -10,7 +10,8 @@ const initialState = {
 };
 
 export const signinUser = createAsyncThunk("user/signIn", async (data) => {
-  const res = await axios.post("http://localhost:5000/api/auth/", data);
+  const res = await axios.post("http://localhost:3000/api/auth/", data);
+  console.log(res);
   if (res.data) {
     localStorage.setItem("user", JSON.stringify(res.data));
   }
@@ -27,7 +28,8 @@ const userSlice = createSlice({
       state.isLoading = false;
     },
   },
-  extraReducers: (builder) => { // Builder callback notation
+  extraReducers: (builder) => {
+    // Builder callback notation
     builder.addCase(signinUser.pending, (state) => {
       state.isLoading = true;
     });
