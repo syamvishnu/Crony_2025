@@ -3,6 +3,7 @@ import userModel from "../model/userModel.js";
 
 const userLoginActivity = async (req, res, next) => {
   const penno = req.body.penno;
+  console.log(req.body)
   var logState;
   try {
     const userExist = await userModel.findOne({ penno });

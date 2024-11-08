@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Card, Icon, Image, Button, Form } from "semantic-ui-react";
+import { Card, Icon, Image, Button, Checkbox, Form } from "semantic-ui-react";
 import logo from "../img/1.png";
-import "./Login.css";
+import "./Signup.css";
 import { useDispatch, useSelector } from "react-redux";
+import { signUpUser, reset } from "../features/authSlice";
 import { useNavigate } from "react-router-dom";
-import { signinUser, reset } from "../features/authSlice";
 
-function Login() {
+function Signup() {
+  const [name, setName] = useState("");
   const [penno, setPenno] = useState("");
   const [password, setPassword] = useState("");
+  const [admincode, setAdminCode] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,10 +21,12 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const userData = {
+      name,
       penno,
       password,
+      admincode,
     };
-    dispatch(signinUser(userData));
+    dispatch(signUpUser(userData));
   };
 
   useEffect(() => {
@@ -34,12 +38,19 @@ function Login() {
   }, [user, isError, isSuccess, isLoading, navigate, dispatch]);
 
   return (
-    <div className="login">
+    <div className="signup">
       <Card>
         <Image src={logo} wrapped ui={false} />
         <Card.Content>
           <Form type="submit" onSubmit={handleSubmit}>
-            <Form.Field>
+            <Form.Group widths="equal">
+              <Form.Input
+                fluid
+                id="form-subcomponent-shorthand-input-first-name"
+                label="Name"
+                placeholder="Name"
+                onChange={(e) => setName(e.target.value)}
+              />
               <Form.Input
                 fluid
                 id="form-subcomponent-shorthand-input-last-name"
@@ -47,8 +58,8 @@ function Login() {
                 placeholder="PEN Number"
                 onChange={(e) => setPenno(e.target.value)}
               />
-            </Form.Field>
-            <Form.Field>
+            </Form.Group>
+            <Form.Group widths="equal">
               <Form.Input
                 fluid
                 id="form-subcomponent-shorthand-input-first-name"
@@ -57,13 +68,21 @@ function Login() {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
-            </Form.Field>
+              <Form.Input
+                fluid
+                id="form-subcomponent-shorthand-input-last-name"
+                label="Admin Code"
+                placeholder="Admin Code"
+                type="password"
+                onChange={(e) => setAdminCode(e.target.value)}
+              />
+            </Form.Group>
             <Button basic color="blue">
               Submit
             </Button>
             ,<p></p>
             <p>
-              Need to <a href="/signup">SignUp</a>
+              Already have an account <a href="/">Signin</a>
             </p>
           </Form>
         </Card.Content>
@@ -72,4 +91,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
