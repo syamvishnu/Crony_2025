@@ -15,9 +15,20 @@ import logo1 from "../img/cbdm.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import UserCard from "./UserCard"
+import { logOutUser, reset } from "../features/authSlice";
+
 
 
 function Navbar() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const onLogout = () => {
+    dispatch(logOutUser());
+    dispatch(reset());
+    navigate("/");
+  };
+
   
 
   return (
@@ -39,7 +50,7 @@ function Navbar() {
             <Dropdown style={{ color: "#347C98" }} item >
               <DropdownMenu>
                 <DropdownItem>
-                 <UserCard />
+                 <UserCard onLogout={onLogout} />
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

@@ -24,6 +24,11 @@ export const signUpUser = createAsyncThunk("user/signUp", async (data) => {
   return res.data;
 });
 
+export const logOutUser = createAsyncThunk("user/logOut", async (data) => {
+  await localStorage.removeItem("user");
+});
+
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -61,6 +66,17 @@ const userSlice = createSlice({
       .addCase(signUpUser.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
+      })
+      .addCase(logOutUser.pending, (state) => {
+        state.status = 'pending';
+      })
+      .addCase(logOutUser.fulfilled, (state) => {
+        state.status = 'fulfilled';
+        state.user = null; // Clear the user data on successful logout
+      })
+      .addCase(logOutUser.rejected, (state, action) => {
+        state.status = 'rejected';
+        state.error = action.payload; // Set the error message
       });
   },
 });

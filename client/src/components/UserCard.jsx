@@ -13,7 +13,7 @@ import logo from "../img/USER.png";
 import { useSelector, useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 
-function userCard() {
+function userCard({onLogout}) {
   const { user } = useSelector((state) => state.user);
 
   const [redirect, setRedirect] = useState(false);
@@ -41,7 +41,7 @@ function userCard() {
           </CardContent>
           <CardContent extra>
             <div className="ui two buttons">
-              <Button basic color="green">
+              <Button basic color="green" onClick={onLogout}>
                 Logout
               </Button>
               {user.roll == "admin" ? (
