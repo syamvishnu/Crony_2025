@@ -4,7 +4,7 @@ const sdrSearchActivity = async (req, res, next) => {
   console.log(req.body);
   try {
     const addSdrLogactivity = await sdrLogModel.create({
-      userId: req.body.userDetails._id,
+      userId: req.body.userDetails.id,
       name: req.body.userDetails.name,
       penno: req.body.userDetails.penno,
       data: req.body.data,

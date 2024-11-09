@@ -23,7 +23,7 @@ function App() {
           exact
           element={<ProtectedRoutes component={Home} />}
         />
-         <Route
+        <Route
           path="/result"
           exact
           element={<ProtectedRoutes component={Dispaly} />}

@@ -23,6 +23,7 @@ function Dispaly() {
   const [open, setOpen] = React.useState(true);
 
   const { data, error, loading, succes } = useSelector((state) => state.sdr);
+  console.log(data);
 
   if (data) {
     sdrData = data.data.numberFound;
@@ -69,14 +70,16 @@ function Dispaly() {
                               Alternative Number
                             </Table.HeaderCell>
                             <Table.HeaderCell>DOB</Table.HeaderCell>
-                            <Table.HeaderCell>Activation Date</Table.HeaderCell>
+                            <Table.HeaderCell>
+                              Service Provider
+                            </Table.HeaderCell>
                             <Table.HeaderCell>Address</Table.HeaderCell>
                           </Table.Row>
                         </Table.Header>
 
                         {sdrData.map((val) => {
                           return (
-                            <Table.Body key={val.tnumber}>
+                            <Table.Body key={val.service_provider}>
                               <Table.Row>
                                 <Table.Cell>{val.tnumber}</Table.Cell>
                                 <Table.Cell singleLine>
@@ -93,9 +96,9 @@ function Dispaly() {
                                 </Table.Cell>
                                 <Table.Cell singleLine>{val.dob}</Table.Cell>
                                 <Table.Cell singleLine>
-                                  {val.activationdate}
+                                  {val.service_provider}
                                 </Table.Cell>
-                                <Table.Cell>{val.permanantaddress}</Table.Cell>
+                                <Table.Cell>{val.localaddress}</Table.Cell>
                               </Table.Row>
                             </Table.Body>
                           );
@@ -108,7 +111,7 @@ function Dispaly() {
                 <div style={{ padding: "50px", display: "flex" }}>
                   <Image size="medium" src={img} />
                   <Modal.Content image>
-                    <Table>
+                    <Table key={sdrData.tnumber}>
                       <Table.Header>
                         <Table.Row>
                           <Table.HeaderCell></Table.HeaderCell>
@@ -159,7 +162,7 @@ function Dispaly() {
                             basic
                             style={{ textAlign: "center" }}
                           >
-                            {sdrData.ad2}&nbsp;{sdrData.ad3}&nbsp;{sdrData.ad5}
+                            {sdrData.localaddress}
                           </Table.HeaderCell>
                         </Table.Row>
                         <Table.Row>
@@ -186,12 +189,12 @@ function Dispaly() {
                         </Table.Row>
                         <Table.Row>
                           <Table.HeaderCell></Table.HeaderCell>
-                          <Table.HeaderCell>Activation Date</Table.HeaderCell>
+                          <Table.HeaderCell>Service Provider</Table.HeaderCell>
                           <Table.HeaderCell
                             basic
                             style={{ textAlign: "center" }}
                           >
-                            {sdrData.activationdate}
+                            {sdrData.service_provider}
                           </Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>

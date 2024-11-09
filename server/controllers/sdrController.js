@@ -13,13 +13,13 @@ const sdrSearch = async (req, res, next) => {
       return res.status(400).json("Please check the number");
     }
 
-    const numberFound = await sdrModel.findOne({ tumber: Num }).lean();
+    console.log(Num);
+
+    const numberFound = await sdrModel.findOne({ tnumber: Num }).lean();
 
     if (numberFound) {
       return res.status(200).json({
-        message: "Data found successfully",
-        status: 200,
-        data: numberFound,
+        numberFound,
       });
     } else {
       return res.status(400).json("No Data Found");
@@ -39,16 +39,14 @@ const sdrSearch = async (req, res, next) => {
         ],
       })
       .select(
-        "tnumber subscribername fatherhusname aadhaar addressproff alternative dob activationdate ad2 ad3 ad5"
+        "tnumber subscribername fatherhusname aadhaar addressproff alternative dob localaddress service_provider"
       )
       .lean()
       .limit(100);
 
     if (numberFound && numberFound.length > 0) {
       // Check if numberFound is not empty
-      return res.json({
-        status: 200,
-        message: "Data Found",
+      return res.status(200).json({
         numberFound,
       });
     } else {

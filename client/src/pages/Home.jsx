@@ -31,7 +31,7 @@ function Home() {
   }
 
   const { user } = useSelector((state) => state.user);
-  console.log(user.roll)
+  console.log(user.roll);
 
   const handleOption = (e, { name, value }) => {
     setSelectOption({ [name]: value });
@@ -55,6 +55,7 @@ function Home() {
       data: details.number,
       userDetails: user,
     };
+    console.log(newData);
 
     dispatch(sdrSearch(newData));
     setDetails({

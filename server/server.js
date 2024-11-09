@@ -17,15 +17,15 @@ const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: 'http://localhost:5173' }));  // or your frontend URL
+app.use(cors({ origin: "http://localhost:5173" })); // or your frontend URL
 
 app.use("/api/auth", userLoginActivity, userRouter);
-app.use("/api/sdr", sdrSearchActivity, sdrRouter);
-app.use("/api/keyword", keywordRoute );
+app.use("/api/sdr", sdrRouter);
+app.use("/api/keyword", keywordRoute);
 
 app.use("/api/admin", isAdmin, AdminRouter);
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 connectDB();
 

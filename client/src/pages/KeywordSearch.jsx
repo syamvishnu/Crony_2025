@@ -36,6 +36,7 @@ function Keywordsearch() {
       email1,
       userDetails: user,
     };
+    console.log(queryData);
 
     setName("");
     setKey1("");
@@ -69,6 +70,7 @@ function Keywordsearch() {
               </FormGroup>
               <FormGroup widths="equal">
                 <FormInput
+                  disabled
                   fluid
                   id="form-subcomponent-shorthand-input-last-name"
                   label="Email"
