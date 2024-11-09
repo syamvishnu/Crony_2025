@@ -44,6 +44,7 @@ const signUpUser = async (req, res, next) => {
         _id,
         name,
         penno,
+        
       });
     }
   } catch (error) {
@@ -64,12 +65,13 @@ const signinUser = async (req, res, next) => {
     } else
       bcrypt.compare(password, userExist.password).then((status) => {
         if (status) {
-          const { name, _id, penno } = userExist;
+          const { name, _id, penno, roll } = userExist;
           generateToken(res, _id);
           return res.status(200).json({
             name,
             id: _id,
             penno,
+            roll,
             message: "Login successfully",
           });
         } else {
@@ -83,4 +85,18 @@ const signinUser = async (req, res, next) => {
   }
 };
 
-export { signUpUser, signinUser };
+// Logout User
+const logoutUser = async (req, res, next) => {
+  try {
+    // Clear the JWT cookie
+    res.clearCookie("token");
+    res.status(200).json({
+      status: 200,
+      message: "Logout Successful",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { signUpUser, signinUser, logoutUser };

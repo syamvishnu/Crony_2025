@@ -14,7 +14,7 @@ const sdrSearchActivity = async (req, res, next) => {
 
     next();
   } catch (error) {
-    next();
+    next(error);
   }
 };
 

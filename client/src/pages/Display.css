@@ -1,0 +1,11 @@
+.display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    background-color: #73c6b6;
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+  

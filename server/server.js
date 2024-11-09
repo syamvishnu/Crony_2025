@@ -10,20 +10,19 @@ import sdrRouter from "./routes/sdrRoutes.js";
 import sdrSearchActivity from "./middleware/sdrLogMiddleware.js";
 import AdminRouter from "./routes/adminRoutes.js";
 import { isAdmin } from "./middleware/adminMiddleware.js";
+import keywordRoute from "./routes/keywordRoute.js";
 dotenv.config();
 
 const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+app.use(cors({ origin: 'http://localhost:5173' }));  // or your frontend URL
 
 app.use("/api/auth", userLoginActivity, userRouter);
 app.use("/api/sdr", sdrSearchActivity, sdrRouter);
+app.use("/api/keyword", keywordRoute );
+
 app.use("/api/admin", isAdmin, AdminRouter);
 
 const PORT = process.env.PORT || 5000;
