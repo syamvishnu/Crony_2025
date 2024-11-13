@@ -12,6 +12,7 @@ const options = [
 ];
 
 function Home() {
+
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();

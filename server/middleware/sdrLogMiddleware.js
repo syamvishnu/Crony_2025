@@ -1,7 +1,6 @@
 import sdrLogModel from "../model/sdrLogModel.js";
 
 const sdrSearchActivity = async (req, res, next) => {
-  console.log(req.body);
   try {
     const addSdrLogactivity = await sdrLogModel.create({
       userId: req.body.userDetails.id,
