@@ -1,7 +1,14 @@
-const getUser = (req, res) => {
+import userModel from "../model/userModel.js";
+
+const getUser = async (req, res, next) => {
   try {
-    res.status(200).json({ Message: "Ok" });
-  } catch (error) {}
+    const fetchUsers = await userModel.find({});
+
+    res.status(200).json({ users: fetchUsers });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 export { getUser };

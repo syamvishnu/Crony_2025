@@ -44,7 +44,6 @@ const signUpUser = async (req, res, next) => {
         _id,
         name,
         penno,
-        
       });
     }
   } catch (error) {
@@ -66,12 +65,14 @@ const signinUser = async (req, res, next) => {
       bcrypt.compare(password, userExist.password).then((status) => {
         if (status) {
           const { name, _id, penno, roll } = userExist;
-          generateToken(res, _id);
+          const token = generateToken(res, _id);
+          console.log(token)
           return res.status(200).json({
             name,
             id: _id,
             penno,
             roll,
+            token,
             message: "Login successfully",
           });
         } else {

@@ -17,7 +17,7 @@ const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:5173" })); // or your frontend URL
+app.use(cors({ origin: "http://localhost:5173", credentials: true })); // or your frontend URL
 
 app.use("/api/auth", userLoginActivity, userRouter);
 app.use("/api/sdr", sdrRouter);

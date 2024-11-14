@@ -13,6 +13,7 @@ const initialState = {
 export const signinUser = createAsyncThunk("user/signIn", async (data) => {
   const res = await axios.post("http://localhost:5000/api/auth/", data);
   if (res.data) {
+    console.log(res.data);
     localStorage.setItem("user", JSON.stringify(res.data));
   }
   return res.data;
@@ -27,7 +28,6 @@ export const signUpUser = createAsyncThunk("user/signUp", async (data) => {
 export const logOutUser = createAsyncThunk("user/logOut", async (data) => {
   await localStorage.removeItem("user");
 });
-
 
 const userSlice = createSlice({
   name: "user",
@@ -68,14 +68,14 @@ const userSlice = createSlice({
         state.isError = true;
       })
       .addCase(logOutUser.pending, (state) => {
-        state.status = 'pending';
+        state.status = "pending";
       })
       .addCase(logOutUser.fulfilled, (state) => {
-        state.status = 'fulfilled';
+        state.status = "fulfilled";
         state.user = null; // Clear the user data on successful logout
       })
       .addCase(logOutUser.rejected, (state, action) => {
-        state.status = 'rejected';
+        state.status = "rejected";
         state.error = action.payload; // Set the error message
       });
   },

@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {
   CardMeta,
   CardHeader,
@@ -17,6 +18,39 @@ import {
 
 function SidebarCard() {
   const [open, setOpen] = React.useState(false);
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null); // Track errors
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        // Retrieve the user from localStorage
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user.token) {
+          throw new Error("No token found. Please log in.");
+        }
+
+        // Fetch users from the admin endpoint
+        const reqs = await axios.get(
+          "http://localhost:5000/api/admin/getuser",
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`, // Attach the token
+            },
+          }
+        );
+
+        // Update state with the fetched users
+        console.log(reqs)
+        setUsers(reqs.data);
+      } catch (error) {
+        console.error("Error fetching users:", error.message);
+        setError(error.message); // Update the error state
+      }
+    };
+
+    getUser();
+  }, []);
+  
 
   return (
     <div>
