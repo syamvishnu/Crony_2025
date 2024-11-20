@@ -37,13 +37,14 @@ const signUpUser = async (req, res, next) => {
     });
 
     if (addUser) {
-      generateToken(res, addUser._id);
       const { _id, name, penno } = addUser;
+      const token = generateToken(res, _id);
       res.status(200).json({
         message: "User Registred Succsessfully",
         _id,
         name,
         penno,
+        token,
       });
     }
   } catch (error) {
@@ -66,7 +67,6 @@ const signinUser = async (req, res, next) => {
         if (status) {
           const { name, _id, penno, roll } = userExist;
           const token = generateToken(res, _id);
-          console.log(token)
           return res.status(200).json({
             name,
             id: _id,

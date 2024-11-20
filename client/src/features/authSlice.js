@@ -13,7 +13,6 @@ const initialState = {
 export const signinUser = createAsyncThunk("user/signIn", async (data) => {
   const res = await axios.post("http://localhost:5000/api/auth/", data);
   if (res.data) {
-    console.log(res.data);
     localStorage.setItem("user", JSON.stringify(res.data));
   }
   return res.data;
@@ -22,6 +21,10 @@ export const signinUser = createAsyncThunk("user/signIn", async (data) => {
 // Async thunk for user sign-up
 export const signUpUser = createAsyncThunk("user/signUp", async (data) => {
   const res = await axios.post("http://localhost:5000/api/auth/signup/", data);
+  if (res.data) {
+    localStorage.setItem("user", JSON.stringify(res.data));
+  }
+
   return res.data;
 });
 

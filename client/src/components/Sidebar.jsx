@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logOutUser, reset } from "../features/authSlice";
@@ -15,8 +15,11 @@ import {
   Step,
 } from "semantic-ui-react";
 import SidebarCard from "./SidebarCard";
+import UserLogTable from "./UserLogTable";
+import UserLogToAdmin from "../pages/UserLogToAdmin";
 
 function Sidebars() {
+  const [selectPage, setSelectpage] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,15 +29,19 @@ function Sidebars() {
     navigate("/");
   };
 
-  const onKey = () => {
+  const onDash = () => {
     dispatch(reset());
-    navigate("/keyword");
+    navigate("/home");
+  };
+  const onLog = () => {
+    dispatch(reset());
+    setSelectpage(false);
   };
 
-    const onDash = () => {
-      dispatch(reset());
-      navigate("/home");
-    };
+  const onUserList = () => {
+    dispatch(reset());
+    setSelectpage(true);
+  };
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -65,24 +72,17 @@ function Sidebars() {
             </StepContent>
           </Step>
 
-          <Step active onClick={onKey}>
-            <Icon name="sign-out" />
-            <StepContent>
-              <StepTitle>Keyword</StepTitle>
-            </StepContent>
-          </Step>
-
-          <Step active>
+          <Step active onClick={onUserList}>
             <Icon name="user secret" />
             <StepContent>
-              <StepTitle>Profile</StepTitle>
+              <StepTitle>User's List</StepTitle>
             </StepContent>
           </Step>
 
-          <Step active>
+          <Step active onClick={onLog}>
             <Icon name="globe" />
             <StepContent>
-              <StepTitle>Logs</StepTitle>
+              <StepTitle>User's Logs</StepTitle>
             </StepContent>
           </Step>
 
@@ -104,8 +104,7 @@ function Sidebars() {
           overflowY: "auto",
         }}
       >
-        <SidebarCard />
-        
+        {selectPage ? <SidebarCard /> : <UserLogToAdmin />}
       </div>
     </div>
   );
