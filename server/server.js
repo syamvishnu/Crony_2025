@@ -23,7 +23,7 @@ app.use("/api/auth", userLoginActivity, userRouter);
 app.use("/api/sdr", sdrRouter);
 app.use("/api/keyword", keywordRoute);
 
-app.use("/api/admin", isAdmin, AdminRouter);
+app.use("/api/admin", AdminRouter);
 
 const PORT = 5000;
 
