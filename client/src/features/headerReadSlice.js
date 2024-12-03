@@ -1,25 +1,30 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
+const user = JSON.parse(localStorage.getItem("user"));
+
 const initialState = {
   isLoading: false,
   isSuccess: false,
   isError: false,
-  data: [],
+  header: [],
 };
 
 // Async thunk for user sign-in
 export const headerRead = createAsyncThunk("db/header", async (data) => {
-  const res = await axios.post("http://localhost:5000/api/admin/headers", data);
+  const res = await axios.post(
+    "http://localhost:5000/api/admin/headers",
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    }
+  );
   return res.data;
 });
 
-export const uploadData = createAsyncThunk("db/upload", async (data) => {
-  console.log(data);
-  const res = await axios.post("http://localhost:5000/api/admin/update", data);
-  return res.data;
-});
-
-const dbData = createSlice({
+const headerReadSlice = createSlice({
   name: "dbData",
   initialState,
   reducers: {
@@ -38,31 +43,17 @@ const dbData = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.isError = false;
-        state.data = action.payload;
+        state.header = action.payload;
       })
       .addCase(headerRead.rejected, (state) => {
         state.isLoading = false;
         state.isError = true;
-      })
-
-      /////////////  DB Update /////////////////////////
-
-      .addCase(uploadData.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(uploadData.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.isError = false;
-        state.data = action.payload;
-      })
-      .addCase(uploadData.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
       });
+
+    /////////////  DB Update /////////////////////////
   },
 });
 
-export const { reset } = dbData.actions;
+export const { reset } = headerReadSlice.actions;
 
-export default dbData.reducer;
+export default headerReadSlice.reducer;

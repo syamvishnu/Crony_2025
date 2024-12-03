@@ -43,6 +43,11 @@ function Sidebars() {
     setSelectpage(true);
   };
 
+  const onDb = () => {
+    dispatch(reset());
+    navigate("/upload");
+  };
+
   return (
     <div style={{ display: "flex", height: "100vh" }}>
       {/* Sidebar */}
@@ -83,6 +88,13 @@ function Sidebars() {
             <Icon name="globe" />
             <StepContent>
               <StepTitle>User's Logs</StepTitle>
+            </StepContent>
+          </Step>
+
+          <Step active onClick={onDb}>
+            <Icon name="database" />
+            <StepContent>
+              <StepTitle>DataBase</StepTitle>
             </StepContent>
           </Step>
 

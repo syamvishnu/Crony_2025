@@ -7,15 +7,15 @@ const initialState = {
   data: [],
 };
 
-// Async thunk for user sign-in
-export const headerRead = createAsyncThunk("db/header", async (data) => {
-  const res = await axios.post("http://localhost:5000/api/admin/headers", data);
-  return res.data;
-});
+const user = JSON.parse(localStorage.getItem("user"));
 
 export const uploadData = createAsyncThunk("db/upload", async (data) => {
   console.log(data);
-  const res = await axios.post("http://localhost:5000/api/admin/update", data);
+  const res = await axios.post("http://localhost:5000/api/admin/update", data, {
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  });
   return res.data;
 });
 
@@ -31,21 +31,6 @@ const dbData = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(headerRead.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(headerRead.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.isError = false;
-        state.data = action.payload;
-      })
-      .addCase(headerRead.rejected, (state) => {
-        state.isLoading = false;
-        state.isError = true;
-      })
-
-      /////////////  DB Update /////////////////////////
 
       .addCase(uploadData.pending, (state) => {
         state.isLoading = true;

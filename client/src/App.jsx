@@ -66,7 +66,7 @@ function App() {
       <Routes>
         <Route path="/" exact element={<Login />} />
         <Route path="/signup" exact element={<Signup />} />
-        <Route path="/test" exact element={<HeaderList />} />
+        <Route path="/test" exact />
 
         <Route
           path="/home"
@@ -92,6 +92,11 @@ function App() {
         <Route
           path="/upload"
           element={<ProtectedAdmin component={DbUpdate} />}
+        />
+
+        <Route
+          path="/header"
+          element={<ProtectedAdmin component={HeaderList} />}
         />
       </Routes>
     </div>

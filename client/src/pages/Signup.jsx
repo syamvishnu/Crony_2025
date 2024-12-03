@@ -5,6 +5,7 @@ import "./Signup.css";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpUser, reset } from "../features/authSlice";
 import { useNavigate } from "react-router-dom";
+import ErrorMessage from "../components/ErrorMessage";
 
 function Signup() {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ function Signup() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, isLoading } = useSelector(
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.user
   );
 
@@ -35,7 +36,7 @@ function Signup() {
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, isLoading, navigate, dispatch]);
+  }, [user, isSuccess, isLoading, navigate, dispatch]);
 
   return (
     <div className="signup">
@@ -50,6 +51,7 @@ function Signup() {
                 label="Name"
                 placeholder="Name"
                 onChange={(e) => setName(e.target.value)}
+                required
               />
               <Form.Input
                 fluid
@@ -57,6 +59,8 @@ function Signup() {
                 label="PEN Number"
                 placeholder="PEN Number"
                 onChange={(e) => setPenno(e.target.value)}
+                required
+                type="number"
               />
             </Form.Group>
             <Form.Group widths="equal">
@@ -67,6 +71,7 @@ function Signup() {
                 placeholder="Password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <Form.Input
                 fluid
@@ -75,6 +80,7 @@ function Signup() {
                 placeholder="Admin Code"
                 type="password"
                 onChange={(e) => setAdminCode(e.target.value)}
+                required
               />
             </Form.Group>
             <Button basic color="blue">
@@ -85,6 +91,7 @@ function Signup() {
               Already have an account <a href="/">Signin</a>
             </p>
           </Form>
+          {isError && <ErrorMessage message={message.message} />}
         </Card.Content>
       </Card>
     </div>

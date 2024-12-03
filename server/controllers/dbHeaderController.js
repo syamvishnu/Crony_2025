@@ -87,7 +87,7 @@ const columnsName = async (req, res) => {
     const headers = firstLine.split("|");
 
     // Send headers as a JSON response
-    return res.json({ headers });
+    return res.json({ headers, fileName });
   } catch (err) {
     console.error("Error reading file:", err.message);
 

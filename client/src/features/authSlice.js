@@ -7,31 +7,55 @@ const initialState = {
   isSuccess: false,
   isError: false,
   user: user ? user : null,
+  message: "",
+  validationErrors: "",
 };
 
 // Async thunk for user sign-in
-export const signinUser = createAsyncThunk("user/signIn", async (data) => {
-  const res = await axios.post("http://localhost:5000/api/auth/", data);
-  if (res.data) {
-    localStorage.setItem("user", JSON.stringify(res.data));
+export const signinUser = createAsyncThunk(
+  "user/signIn",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/", data);
+      console.log(res.data);
+      if (res.data) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+      }
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
   }
-  return res.data;
-});
+);
 
-// Async thunk for user sign-up
-export const signUpUser = createAsyncThunk("user/signUp", async (data) => {
-  const res = await axios.post("http://localhost:5000/api/auth/signup/", data);
-  if (res.data) {
-    localStorage.setItem("user", JSON.stringify(res.data));
+export const signUpUser = createAsyncThunk(
+  "user/signUp",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/signup/",
+        data
+      );
+      if (res.data) {
+        localStorage.setItem("user", JSON.stringify(res.data));
+      }
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Something went wrong");
+    }
   }
+);
 
-  return res.data;
-});
-
-export const logOutUser = createAsyncThunk("user/logOut", async (data) => {
-  await localStorage.removeItem("user");
-});
-
+export const logOutUser = createAsyncThunk(
+  "user/logOut",
+  async (_, { rejectWithValue }) => {
+    try {
+      localStorage.removeItem("user");
+    } catch (error) {
+      return rejectWithValue("Failed to log out");
+    }
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -40,6 +64,7 @@ const userSlice = createSlice({
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
+      state.validationErrors = "";
     },
   },
   extraReducers: (builder) => {
@@ -53,9 +78,11 @@ const userSlice = createSlice({
         state.isError = false;
         state.user = action.payload;
       })
-      .addCase(signinUser.rejected, (state) => {
+      .addCase(signinUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.message = action.payload;
+        state.validationErrors = action.payload?.errors || {};
       })
       .addCase(signUpUser.pending, (state) => {
         state.isLoading = true;
@@ -66,9 +93,11 @@ const userSlice = createSlice({
         state.isError = false;
         state.user = action.payload;
       })
-      .addCase(signUpUser.rejected, (state) => {
+      .addCase(signUpUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        state.message = action.payload;
+        state.validationErrors = action.payload?.errors || {};
       })
       .addCase(logOutUser.pending, (state) => {
         state.status = "pending";
@@ -80,6 +109,7 @@ const userSlice = createSlice({
       .addCase(logOutUser.rejected, (state, action) => {
         state.status = "rejected";
         state.error = action.payload; // Set the error message
+        state.validationErrors = action.payload?.errors || {};
       });
   },
 });

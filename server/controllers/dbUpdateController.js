@@ -241,6 +241,17 @@ import readline from "readline";
 const dbUpdate = async (req, res, next) => {
   try {
     const { results, selectedFile } = req.body;
+    const isEmpty = (value) => {
+      return (
+        value == null || // Check for null or undefined
+        (typeof value === "object" && Object.keys(value).length === 0) || // Check for empty objects
+        (Array.isArray(value) && value.length === 0) // Check for empty arrays
+      );
+    };
+
+    if (isEmpty(results)) {
+      return res.status(400).json({ message: "No Input Found!" }); // Use 400 for client-side errors
+    }
 
     // Validate request data
     if (!results || !selectedFile || !selectedFile.fileName) {
@@ -304,7 +315,6 @@ const dbUpdate = async (req, res, next) => {
       if (batch.length === batchSize) {
         try {
           await dbUpdateModel.insertMany(batch); // Insert batch into MongoDB
-          console.log(`Inserted ${batch.length} documents.`);
         } catch (dbError) {
           console.error("Error inserting batch into MongoDB:", dbError);
         }

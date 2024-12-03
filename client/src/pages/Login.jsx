@@ -5,6 +5,7 @@ import "./Login.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signinUser, reset } from "../features/authSlice";
+import ErrorMessage from "../components/ErrorMessage";
 
 function Login() {
   const [penno, setPenno] = useState("");
@@ -12,9 +13,11 @@ function Login() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, isLoading } = useSelector(
+  const { user, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.user
   );
+
+  console.log(message, isError);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,7 +34,7 @@ function Login() {
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, isLoading, navigate, dispatch]);
+  }, [user, isSuccess, isLoading, navigate, dispatch]);
 
   return (
     <div className="login">
@@ -46,6 +49,8 @@ function Login() {
                 label="PEN Number"
                 placeholder="PEN Number"
                 onChange={(e) => setPenno(e.target.value)}
+                required
+                type="number"
               />
             </Form.Field>
             <Form.Field>
@@ -56,6 +61,7 @@ function Login() {
                 placeholder="Password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
             </Form.Field>
             <Button basic color="blue">
@@ -66,6 +72,7 @@ function Login() {
               Need to <a href="/signup">SignUp</a>
             </p>
           </Form>
+          {isError && <ErrorMessage message={message.message} />}
         </Card.Content>
       </Card>
     </div>

@@ -4,8 +4,8 @@ import "./DbUpload.css";
 import { Button, Input, Container } from "semantic-ui-react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { headerRead } from "../features/dbUpdateSlice.js";
 import { useNavigate } from "react-router-dom";
+import { headerRead } from "../features/headerReadSlice.js";
 
 function DbUpdate() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -26,7 +26,7 @@ function DbUpdate() {
       fileName: selectedFile,
     };
     dispatch(headerRead(data1));
-    navigate("/test", { state: { data1 } });
+    navigate("/header", { state: { data1 } });
   };
 
   return (

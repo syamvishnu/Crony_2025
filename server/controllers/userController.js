@@ -10,20 +10,26 @@ const signUpUser = async (req, res, next) => {
 
   try {
     if (!penno || !name || !password || !admincode) {
-      return res.status(400).json("Enter All Fields");
+      return res.status(400).json({ message: "Enter All Fields" });
     }
 
     if (admincode != "test@123") {
-      return res.status(400).json("Admin Code Missmatch");
+      return res.status(400).json({ message: "Admin Code Missmatch" });
+    }
+
+    if (password.length != 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 digits long" });
     }
 
     if (penno.toString().length != 6) {
-      return res.status(400).json("Invalid PEN Number");
+      return res.status(400).json({ message: "Invalid PEN Number" });
     }
 
     const existUser = await userModel.find({ penno });
     if (existUser.length > 0) {
-      return res.status(400).json("PEN Number Already Exists");
+      return res.status(400).json({ message: "PEN Number Already Exists" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -61,7 +67,7 @@ const signinUser = async (req, res, next) => {
 
     const userExist = await userModel.findOne({ penno }).select("+password");
     if (!userExist) {
-      return res.status(400).json("User Not Found");
+      return res.status(400).json({ message: "User Not Found" });
     } else
       bcrypt.compare(password, userExist.password).then((status) => {
         if (status) {

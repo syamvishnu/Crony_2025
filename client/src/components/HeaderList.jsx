@@ -220,7 +220,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../img/loading1.png";
-import logo1 from "../img/progress.png";
+import logo1 from "../img/successful.png";
+import errorLogo from "../img/error.png";
 
 import {
   GridColumn,
@@ -231,22 +232,31 @@ import {
   Loader,
   Image,
   Segment,
+  Transition,
+  Icon,
+  Message,
 } from "semantic-ui-react";
 import Navbar from "./Navbar";
-import { uploadData } from "../features/dbUpdateSlice";
 import { useLocation } from "react-router-dom";
+import { uploadData } from "../features/dbUpdateSlice";
+import { reset } from "../features/dbUpdateSlice";
 
 function HeaderList() {
   const dispatch = useDispatch();
   const location = useLocation();
   const { data1 } = location.state || {};
 
-  const { data, isLoading, error, isSuccess } = useSelector(
-    (state) => state.db
+  const { header, isLoading, isError, isSuccess } = useSelector(
+    (state) => state.header
   );
+  console.log(header, isLoading, isError, isSuccess);
+
+  const uploadRes = useSelector((state) => state.db);
+
+  console.log(uploadRes);
 
   const [userInputs, setUserInputs] = useState({});
-  if (isLoading) {
+  if (uploadRes.isLoading) {
     return (
       <Segment
         style={{
@@ -284,12 +294,63 @@ function HeaderList() {
       </Segment>
     );
   }
-  if (error) {
-    return <div>Error loading headers.</div>;
+
+  if (isError) {
+    return (
+      <div>
+        <Segment
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          {/* Rotating image */}
+          <img
+            src={errorLogo}
+            alt="Successful..."
+            style={{
+              width: "100px",
+              height: "100px",
+              animation: "spin 5s linear infinite",
+            }}
+          />
+
+          <h1>Error loading header.... </h1>
+        </Segment>
+      </div>
+    );
   }
 
-  if (!data || !Array.isArray(data.headers)) {
-    return <div>No headers available.</div>;
+  if (!header || !Array.isArray(header.headers)) {
+    return (
+      <div>
+        <Segment
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          {/* Rotating image */}
+          <img
+            src={errorLogo}
+            alt="Successful..."
+            style={{
+              width: "100px",
+              height: "100px",
+              animation: "spin 5s linear infinite",
+            }}
+          />
+
+          <h1>No Headers Available.... </h1>
+        </Segment>
+      </div>
+    );
   }
 
   const handleInputChange = (field, value) => {
@@ -302,8 +363,8 @@ function HeaderList() {
   const handleSubmit = () => {
     const results = Object.entries(userInputs).reduce((acc, [field, value]) => {
       const index = parseInt(value.trim(), 10);
-      if (!isNaN(index) && index >= 1 && index <= data.headers.length) {
-        acc[field] = data.headers[index - 1];
+      if (!isNaN(index) && index >= 1 && index <= header.headers.length) {
+        acc[field] = header.headers[index - 1];
       } else {
         acc[field] = "Invalid index";
       }
@@ -315,15 +376,17 @@ function HeaderList() {
     };
 
     dispatch(uploadData(datas));
-    console.log("Selected Headers for each field:", results);
   };
 
   return (
     <div>
       <Navbar />
       <div>
-        <Grid columns={5} padded style={{ padding: "60px" }}>
-          {data.headers.map((header, index) => (
+        <h2 style={{ textAlign: "center", paddingTop: "15px" }}>
+          {header.fileName}
+        </h2>
+        <Grid columns={5} padded style={{ padding: "20px" }}>
+          {header.headers.map((header, index) => (
             <GridColumn
               key={header}
               style={{
