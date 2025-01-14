@@ -7,22 +7,26 @@ const reverseSearch = async (req, res, next) => {
 
   console.log("Search criteria:", { key2, key1, father1, email1 });
 
-  // Build the query object dynamically
-  const query = {};
-  if (key2) query.subscribername = { $regex: `.*${key2}.*`, $options: "i" };
-  if (key1) query.localaddress = { $regex: `.*${key1}.*`, $options: "i" };
+  // Build the $or query array
+  const query = [];
+  if (key2)
+    query.push({ subscribername: { $regex: `.*${key2}.*`, $options: "i" } });
+  if (key1)
+    query.push({ localaddress: { $regex: `.*${key1}.*`, $options: "i" } });
   if (father1)
-    query.fatherhusname = { $regex: `.*${father1}.*`, $options: "i" };
-  if (email1) query.email = { $regex: `.*${email1}.*`, $options: "i" };
+    query.push({ fatherhusname: { $regex: `.*${father1}.*`, $options: "i" } });
+  if (email1) query.push({ email: { $regex: `.*${email1}.*`, $options: "i" } });
+
+  // Use $or if there are any conditions, otherwise use an empty query
+  const finalQuery = query.length > 0 ? { $or: query } : {};
 
   try {
     const data1 = await sdrModel
-      .find(query)
+      .find(finalQuery)
       .select(
         "subscribername localaddress tnumber addressproff dob alternative email fatherhusname"
       )
-      .lean()
-      .limit(100);
+      .lean();
 
     console.log("Data found:", data1);
 

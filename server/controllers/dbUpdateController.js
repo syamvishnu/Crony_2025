@@ -262,7 +262,8 @@ const dbUpdate = async (req, res, next) => {
 
     const selectedColumns = Object.values(results); // Columns to be selected
     const newColumnNames = Object.keys(results); // New names for the selected columns
-    const filePath = `./controllers/${selectedFile.fileName}`;
+    const filePath = `./controllers/SDR_Files_Upload/${selectedFile.fileName}`;
+    console.log(filePath);
 
     // Check if file exists
     if (!fs.existsSync(filePath)) {

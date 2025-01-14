@@ -48,6 +48,10 @@ function Tables() {
       selector: (row) => row.dob,
     },
     {
+      name: "Email",
+      selector: (row) => row.email,
+    },
+    {
       name: "Address",
       selector: (row) => row.localaddress,
       wrap: true,
@@ -67,7 +71,16 @@ function Tables() {
         .toLowerCase()
         .includes(e.target.value.toLowerCase());
     });
-    setFilteredData(newData); // update filteredData instead of getData
+    setFilteredData(newData);
+  };
+
+  const handleFilter1 = (e) => {
+    const newData = getData.filter((row) => {
+      return row.localaddress
+        .toLowerCase()
+        .includes(e.target.value.toLowerCase());
+    });
+    setFilteredData(newData);
   };
 
   return (
@@ -91,7 +104,12 @@ function Tables() {
           </Loader>
         ) : (
           <div>
-            <Input focus placeholder="Search..." onChange={handleFilter} />
+            <Input placeholder="Name Filter" onChange={handleFilter} />
+            <Input
+              focus
+              placeholder="Address Filter"
+              onChange={handleFilter1}
+            />
             <DataTable
               keyField="_id"
               columns={columns}

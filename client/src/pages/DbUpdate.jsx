@@ -17,6 +17,7 @@ function DbUpdate() {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+    console.log(event.target.files[0]);
     setSelectedFile(file.name);
   };
 

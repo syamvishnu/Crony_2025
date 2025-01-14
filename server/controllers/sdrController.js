@@ -63,21 +63,21 @@ import sdrModel from "../model/sdrModel.js";
 
 const sdrSearch = async (req, res, next) => {
   const { data, option, userData } = req.body;
-  const Num = Number(data);
+  // const Num = Number(data);
+
+  console.log(data);
 
   try {
     if (option === "Number") {
-      if (!Num) {
+      if (!data) {
         return res.status(400).json("Please Enter Number");
       }
 
-      if (Num.toString().length !== 10) {
+      if (data.length !== 10) {
         return res.status(400).json("Please check the number");
       }
 
-      console.log(Num);
-
-      const numberFound = await sdrModel.findOne({ tnumber: Num }).lean();
+      const numberFound = await sdrModel.findOne({ tnumber: data }).lean();
 
       if (numberFound) {
         return res.status(200).json({ numberFound });
@@ -87,7 +87,7 @@ const sdrSearch = async (req, res, next) => {
     }
 
     if (option === "ID") {
-      if (!Num) {
+      if (!data) {
         return res.status(400).json("Please Enter Input");
       }
 
@@ -95,11 +95,11 @@ const sdrSearch = async (req, res, next) => {
         .find({
           $or: [
             { addressproff: { $regex: data, $options: "i" } },
-            { aadhaar: Num },
+            { aadhaar: data },
           ],
         })
         .select(
-          "tnumber subscribername fatherhusname aadhaar addressproff alternative dob localaddress service_provider"
+          "tnumber subscribername fatherhusname aadhaar addressproff alternative dob localaddress email"
         )
         .lean()
         .limit(100);

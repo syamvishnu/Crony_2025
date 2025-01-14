@@ -70,7 +70,6 @@ function Keywordsearch() {
               </FormGroup>
               <FormGroup widths="equal">
                 <FormInput
-                  disabled
                   fluid
                   id="form-subcomponent-shorthand-input-last-name"
                   label="Email"

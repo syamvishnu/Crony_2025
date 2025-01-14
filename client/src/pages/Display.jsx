@@ -70,9 +70,7 @@ function Dispaly() {
                               Alternative Number
                             </Table.HeaderCell>
                             <Table.HeaderCell>DOB</Table.HeaderCell>
-                            <Table.HeaderCell>
-                              Service Provider
-                            </Table.HeaderCell>
+                            <Table.HeaderCell>Email</Table.HeaderCell>
                             <Table.HeaderCell>Address</Table.HeaderCell>
                           </Table.Row>
                         </Table.Header>
@@ -95,9 +93,7 @@ function Dispaly() {
                                   {val.alternative}
                                 </Table.Cell>
                                 <Table.Cell singleLine>{val.dob}</Table.Cell>
-                                <Table.Cell singleLine>
-                                  {val.service_provider}
-                                </Table.Cell>
+                                <Table.Cell singleLine>{val.email}</Table.Cell>
                                 <Table.Cell>{val.localaddress}</Table.Cell>
                               </Table.Row>
                             </Table.Body>
@@ -189,12 +185,12 @@ function Dispaly() {
                         </Table.Row>
                         <Table.Row>
                           <Table.HeaderCell></Table.HeaderCell>
-                          <Table.HeaderCell>Service Provider</Table.HeaderCell>
+                          <Table.HeaderCell>Email</Table.HeaderCell>
                           <Table.HeaderCell
                             basic
                             style={{ textAlign: "center" }}
                           >
-                            {sdrData.service_provider}
+                            {sdrData.email}
                           </Table.HeaderCell>
                         </Table.Row>
                       </Table.Header>

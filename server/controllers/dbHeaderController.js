@@ -64,7 +64,7 @@ import readline from "readline";
 
 const columnsName = async (req, res) => {
   const { fileName } = req.body;
-  const inputFile = `./controllers/${fileName}`;
+  const inputFile = `./controllers/SDR_Files_Upload/${fileName}`;
 
   try {
     // Check if the file exists
