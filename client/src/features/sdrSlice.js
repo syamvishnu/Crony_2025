@@ -10,7 +10,7 @@ const initialState = {
 
 // Async thunk for SDR search
 export const sdrSearch = createAsyncThunk("sdr/Search", async (data) => {
-  const res = await axios.post("http://192.168.1.69:5000/api/sdr", data);
+  const res = await axios.post("http://192.168.1.10:5000/api/sdr", data);
   return res;
 });
 

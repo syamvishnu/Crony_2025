@@ -17,11 +17,14 @@ const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: "http://localhost:5173", credentials: true })); // or your frontend URL
+// app.use(cors({ origin: "http://192.168.1.60:5173", credentials: true })); // or your frontend URL
+// app.use(cors({ origin: "http://192.168.1.0/24", credentials: true })); // or your frontend URL
+
+app.use(cors());
 
 app.use("/api/auth", userLoginActivity, userRouter);
-app.use("/api/sdr", sdrRouter);
-app.use("/api/keyword", keywordRoute);
+app.use("/api/sdr", sdrSearchActivity, sdrRouter);
+app.use("/api/keyword", sdrSearchActivity, keywordRoute);
 
 app.use("/api/admin", AdminRouter);
 

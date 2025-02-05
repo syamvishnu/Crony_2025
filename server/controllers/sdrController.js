@@ -65,8 +65,6 @@ const sdrSearch = async (req, res, next) => {
   const { data, option, userData } = req.body;
   // const Num = Number(data);
 
-  console.log(data);
-
   try {
     if (option === "Number") {
       if (!data) {

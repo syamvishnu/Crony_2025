@@ -11,11 +11,15 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 export const uploadData = createAsyncThunk("db/upload", async (data) => {
   console.log(data);
-  const res = await axios.post("http://localhost:5000/api/admin/update", data, {
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  });
+  const res = await axios.post(
+    "http://192.168.1.10:5000/api/admin/update",
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    }
+  );
   return res.data;
 });
 

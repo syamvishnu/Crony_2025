@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export const keySearch = createAsyncThunk("key/Search", async (data) => {
-  const res = await axios.post("http://192.168.1.69:5000/api/keyword", data);
+  const res = await axios.post("http://192.168.1.10:5000/api/keyword", data);
   console.log(res);
   return res;
 });

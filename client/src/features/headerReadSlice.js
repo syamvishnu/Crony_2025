@@ -13,7 +13,7 @@ const initialState = {
 // Async thunk for user sign-in
 export const headerRead = createAsyncThunk("db/header", async (data) => {
   const res = await axios.post(
-    "http://localhost:5000/api/admin/headers",
+    "http://192.168.1.10:5000/api/admin/headers",
     data,
     {
       headers: {

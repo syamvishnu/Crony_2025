@@ -16,7 +16,7 @@ export const signinUser = createAsyncThunk(
   "user/signIn",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/", data);
+      const res = await axios.post("http://192.168.1.10:5000/api/auth/", data);
       console.log(res.data);
       if (res.data) {
         localStorage.setItem("user", JSON.stringify(res.data));
@@ -33,7 +33,7 @@ export const signUpUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/signup/",
+        "http://192.168.1.10:5000/api/auth/signup/",
         data
       );
       if (res.data) {

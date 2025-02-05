@@ -7,7 +7,6 @@ import generateToken from "../utils/generatetoken.js";
 const signUpUser = async (req, res, next) => {
   //   console.log(req.body);
   const { penno, name, password, admincode } = req.body;
-
   try {
     if (!penno || !name || !password || !admincode) {
       return res.status(400).json({ message: "Enter All Fields" });
@@ -17,7 +16,7 @@ const signUpUser = async (req, res, next) => {
       return res.status(400).json({ message: "Admin Code Missmatch" });
     }
 
-    if (password.length != 6) {
+    if (password.length < 6) {
       return res
         .status(400)
         .json({ message: "Password must be at least 6 digits long" });
