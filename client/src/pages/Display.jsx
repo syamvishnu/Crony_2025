@@ -15,6 +15,9 @@ import { reset, sdrSearch } from "../features/sdrSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 function Dispaly() {
   var sdrData = "";
   const navigate = useNavigate();
@@ -32,6 +35,48 @@ function Dispaly() {
   const handleBack = () => {
     dispatch(reset);
     navigate("/");
+  };
+
+  const copyFormData = () => {
+    const textToCopy = `Name: ${sdrData.subscribername}\nPhone: ${sdrData.tnumber}\nFather: ${sdrData.fatherhusname}\nAddress Proof: ${sdrData.addressproff}\nAddress: ${sdrData.localaddress}\nAlt No: ${sdrData.alternative}\nDOB: ${sdrData.dob}\nEmail: ${sdrData.email}`;
+
+    navigator.clipboard
+      .writeText(textToCopy)
+      .catch((err) => console.error("Error copying text: ", err));
+  };
+
+  const exportToExcel = () => {
+    if (!sdrData || (Array.isArray(sdrData) && sdrData.length === 0)) {
+      console.error("No data to export.");
+      return;
+    }
+
+    const formattedData = Array.isArray(sdrData) ? sdrData : [sdrData];
+
+    const transformedData = formattedData.map(({ _id, ...rest }) => ({
+      "Phone Number": rest.tnumber,
+      Name: rest.subscribername,
+      DOB: rest.dob,
+      "Father/Hus Name": rest.fatherhusname,
+      Address: rest.localaddress,
+      "Address Proof": rest.addressproff,
+      "Alternate Number": rest.alternative,
+      Email: rest.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(transformedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "SDR Data");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(blob, "SDR_Data.xlsx");
   };
 
   return (
@@ -213,6 +258,16 @@ function Dispaly() {
             <Button color="black" onClick={handleBack}>
               Back
             </Button>
+
+            {Array.isArray(sdrData) ? (
+              <Button color="black" onClick={exportToExcel}>
+                Export
+              </Button>
+            ) : (
+              <Button color="black" onClick={copyFormData}>
+                Copy
+              </Button>
+            )}
           </Modal.Actions>
         </Modal>
       )}

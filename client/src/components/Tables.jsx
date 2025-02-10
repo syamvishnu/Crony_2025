@@ -1,8 +1,9 @@
 import DataTable from "react-data-table-component";
-import { Loader, Input } from "semantic-ui-react";
+import { Loader, Input, Button } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 import "./tables.css";
 import { useSelector } from "react-redux";
 import Navbar from "./Navbar";
@@ -26,7 +27,7 @@ function Tables() {
     (state) => state.key
   );
 
-  console.log(data);
+  console.log(data.data.data1);
 
   const columns = [
     {
@@ -83,6 +84,44 @@ function Tables() {
     setFilteredData(newData);
   };
 
+  if (data) {
+    var sdrData = data.data.data1;
+  }
+
+  const exportToExcel = () => {
+    if (!sdrData || (Array.isArray(sdrData) && sdrData.length === 0)) {
+      console.error("No data to export.");
+      return;
+    }
+
+    const formattedData = Array.isArray(sdrData) ? sdrData : [sdrData];
+
+    const transformedData = formattedData.map(({ _id, ...rest }) => ({
+      "Phone Number": rest.tnumber,
+      Name: rest.subscribername,
+      DOB: rest.dob,
+      "Father/Hus Name": rest.fatherhusname,
+      Address: rest.localaddress,
+      "Address Proof": rest.addressproff,
+      "Alternate Number": rest.alternative,
+      Email: rest.email,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(transformedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "SDR Data");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(blob, "SDR_Data.xlsx");
+  };
+
   return (
     <div>
       <Navbar />
@@ -104,16 +143,25 @@ function Tables() {
           </Loader>
         ) : (
           <div>
-            <Input placeholder="Name Filter" onChange={handleFilter} />
-            <Input
-              focus
-              placeholder="Address Filter"
-              onChange={handleFilter1}
-            />
+            <div style={{ padding: "10px" }}>
+              <Input
+                style={{ paddingRight: "10px" }}
+                placeholder="Name Filter"
+                onChange={handleFilter}
+              />
+              <Input
+                style={{ paddingRight: "10px" }}
+                focus
+                placeholder="Address Filter"
+                onChange={handleFilter1}
+              />
+              <Button icon="upload" onClick={exportToExcel} />
+            </div>
+
             <DataTable
               keyField="_id"
               columns={columns}
-              data={filteredData} // use filteredData instead of getData
+              data={filteredData}
               fixedHeader
               pagination
               customStyles={customStyles}
